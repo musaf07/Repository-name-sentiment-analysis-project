@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Sentiment Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f1f5f9;
+    display: flex;
+}
+
+.sidebar {
+    width: 220px;
+    background: #0f172a;
+    color: white;
+    height: 100vh;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    color: #6366f1;
+}
+
+.main {
+    flex: 1;
+}
+
+.hero {
+    margin: 20px;
+    padding: 30px;
+    border-radius: 20px;
+    color: white;
+    background: linear-gradient(135deg, #1e3a8a, #7c3aed);
+}
+
+.cards {
+    display: flex;
+    gap: 15px;
+    margin: 0 20px;
+}
+
+.card {
+    flex: 1;
+    padding: 20px;
+    border-radius: 15px;
+    color: white;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    text-align: center;
+    font-weight: bold;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin: 20px;
+}
+
+.box {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 90px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    background: #6366f1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+
+ul {
+    padding-left: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>📊 Dashboard</h2>
+</div>
+
+<div class="main">
+
+<div class="hero">
+    <h1>Real-Time AI Sentiment Analysis</h1>
+</div>
+
+<div class="cards">
+    <div class="card">Positive <br><span id="pos">0</span></div>
+    <div class="card">Negative <br><span id="neg">0</span></div>
+    <div class="card">Neutral <br><span id="neu">0</span></div>
+</div>
+
+<div class="grid">
+
+<div class="box">
+    <h3>Analyze Text</h3>
+    <form method="POST" action="/predict">
+        <textarea name="text"></textarea>
+        <button>Analyze</button>
+    </form>
+    {% if result %}<h3>{{ result }}</h3>{% endif %}
+</div>
+
+<div class="box">
+    <h3>Sentiment Chart</h3>
+    <canvas id="chart"></canvas>
+</div>
+
+<div class="box">
+    <h3>AI Insight</h3>
+    <p id="insight"></p>
+
+    <h3>Trending</h3>
+    <ul id="trends"></ul>
+
+    <h3>Live Tweets</h3>
+    <ul id="tweets"></ul>
+</div>
+
+</div>
+
+</div>
+
+<script>
+let chart = new Chart(document.getElementById("chart"), {
+    type:"doughnut",
+    data:{
+        labels:["Positive","Negative","Neutral"],
+        datasets:[{
+            data:[0,0,0],
+            backgroundColor:["green","red","blue"]
+        }]
+    }
+});
+
+function update(){
+    fetch("/live-data")
+    .then(r=>r.json())
+    .then(data=>{
+
+        document.getElementById("pos").innerText=data.positive;
+        document.getElementById("neg").innerText=data.negative;
+        document.getElementById("neu").innerText=data.neutral;
+
+        chart.data.datasets[0].data=[
+            data.positive,
+            data.negative,
+            data.neutral
+        ];
+        chart.update();
+
+        let t=document.getElementById("tweets");
+        t.innerHTML="";
+        data.tweets.forEach(x=>{
+            let li=document.createElement("li");
+            li.innerText=x;
+            t.appendChild(li);
+        });
+
+        let tr=document.getElementById("trends");
+        tr.innerHTML="";
+        data.trends.forEach(x=>{
+            let li=document.createElement("li");
+            li.innerText="#"+x;
+            tr.appendChild(li);
+        });
+
+        document.getElementById("insight").innerText=data.insight;
+    });
+}
+
+setInterval(update,3000);
+</script>
+
+</body>
+</html>

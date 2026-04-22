@@ -1,0 +1,89 @@
+text,sentiment
+I love this product,Positive
+This is amazing,Positive
+Absolutely fantastic experience,Positive
+Very happy with the service,Positive
+Superb quality,Positive
+Highly recommended,Positive
+Best purchase ever,Positive
+I am satisfied,Positive
+Works perfectly,Positive
+Excellent support,Positive
+Really impressed,Positive
+Great value for money,Positive
+Loved it,Positive
+Very useful,Positive
+Nice design,Positive
+Awesome performance,Positive
+This made my day,Positive
+Good job,Positive
+Five stars,Positive
+Brilliant product,Positive
+
+This is terrible,Negative
+I hate this,Negative
+Worst experience ever,Negative
+Very disappointed,Negative
+Not worth it,Negative
+Poor quality,Negative
+Waste of money,Negative
+Bad service,Negative
+Completely useless,Negative
+Awful product,Negative
+Very bad,Negative
+Not recommended,Negative
+Terrible support,Negative
+I regret buying this,Negative
+It broke quickly,Negative
+Worst purchase,Negative
+Extremely poor,Negative
+Unacceptable,Negative
+Disgusting quality,Negative
+Very frustrating,Negative
+
+It's okay,Neutral
+Not bad,Neutral
+Average product,Neutral
+Could be better,Neutral
+Nothing special,Neutral
+Just fine,Neutral
+Neutral experience,Neutral
+So-so,Neutral
+Decent,Neutral
+Moderate quality,Neutral
+It works,Neutral
+No strong feelings,Neutral
+Acceptable,Neutral
+Fine but not great,Neutral
+Okayish,Neutral
+Manageable,Neutral
+Normal product,Neutral
+Satisfactory,Neutral
+Neither good nor bad,Neutral
+Mediocre,Neutral
+ugly,Negative
+horrible,Negative
+disgusting,Negative
+poor performance,Negative
+very slow,Negative
+buggy app,Negative
+crashes often,Negative
+waste time,Negative
+
+beautiful,Positive
+excellent app,Positive
+very fast,Positive
+smooth experience,Positive
+super fast,Positive
+high quality,Positive
+top notch,Positive
+works great,Positive
+
+meh,Neutral
+not sure,Neutral
+okay app,Neutral
+average performance,Neutral
+nothing great,Neutral
+just works,Neutral
+fine app,Neutral
+so so,Neutral 

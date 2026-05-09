@@ -1,64 +1,50 @@
 import sqlite3
 
-DB_NAME = "data.db"
+DB_NAME = "sentiment.db"
 
-
-# =============================
-# 🔹 CONNECT DATABASE
-# =============================
-def get_connection():
-    return sqlite3.connect(DB_NAME)
-
-
-# =============================
-# 🔹 INITIALIZE DATABASE
-# =============================
+# ================= INIT DB =================
 def init_db():
-    conn = get_connection()
-    cursor = conn.cursor()
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS predictions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            text TEXT NOT NULL,
-            sentiment TEXT NOT NULL
-        )
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        text TEXT,
+        sentiment TEXT,
+        confidence REAL
+    )
     """)
 
     conn.commit()
     conn.close()
-    print("✅ Database initialized")
 
 
-# =============================
-# 🔹 SAVE PREDICTION
-# =============================
-def save_prediction(text: str, sentiment: str):
-    conn = get_connection()
-    cursor = conn.cursor()
+# ================= SAVE =================
+def save_prediction(text, sentiment, confidence):
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
 
-    cursor.execute(
-        "INSERT INTO predictions (text, sentiment) VALUES (?, ?)",
-        (text, sentiment)
+    cur.execute(
+        "INSERT INTO history (text, sentiment, confidence) VALUES (?, ?, ?)",
+        (text, sentiment, confidence)
     )
 
     conn.commit()
     conn.close()
 
 
-# =============================
-# 🔹 GET HISTORY
-# =============================
-def get_history(limit: int = 10):
-    conn = get_connection()
-    cursor = conn.cursor()
+# ================= GET =================
+def get_history():
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
 
-    cursor.execute(
-        "SELECT id, text, sentiment FROM predictions ORDER BY id DESC LIMIT ?",
-        (limit,)
-    )
-
-    data = cursor.fetchall()
+    cur.execute("SELECT text, sentiment, confidence FROM history")
+    rows = cur.fetchall()
 
     conn.close()
-    return data
+
+    return [
+        {"text": r[0], "sentiment": r[1], "confidence": r[2]}
+        for r in rows
+    ]

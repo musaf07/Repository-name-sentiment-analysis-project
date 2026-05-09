@@ -14,19 +14,42 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 
 # =============================
 # 🔹 IMPORT ROUTES
 # =============================
-from routes import sentiment   # ✅ make sure this path is correct
+from routes import sentiment
+
+# =============================
+# 🔥 IMPORT DATABASE INIT
+# =============================
+from database.db import init_db
 
 # =============================
 # 🔹 CREATE APP
 # =============================
 app = FastAPI(
-    title="Sentiment API",
-    version="1.0"
+    title="AI Sentiment API",
+    version="2.0"
 )
+
+# =============================
+# 🔓 ENABLE CORS (IMPORTANT FOR FRONTEND)
+# =============================
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# =============================
+# 🔥 INIT DATABASE
+# =============================
+init_db()
+print("✅ Database initialized")
 
 # =============================
 # 🔹 STATIC FILES
@@ -47,7 +70,7 @@ templates = Jinja2Templates(
 # =============================
 app.include_router(
     sentiment.router,
-    prefix="/api/sentiment",   # ✅ IMPORTANT URL PREFIX
+    prefix="/api/sentiment",
     tags=["Sentiment"]
 )
 
@@ -58,8 +81,8 @@ app.include_router(
 def home():
     return {
         "status": "Backend running ✅",
-        "docs": "/docs",
-        "test_api": "/api/sentiment/analyze"
+        "dashboard": "/dashboard",
+        "docs": "/docs"
     }
 
 # =============================
@@ -79,18 +102,26 @@ def dashboard(request: Request):
 def health():
     return {"status": "OK"}
 
-
 # =============================
-# 🔥 RUN SERVER
+# 🔥 RUN SERVER + AUTO OPEN
 # =============================
 if __name__ == "__main__":
     import uvicorn
+    import webbrowser
+    import threading
+    import time
+
+    def open_browser():
+        time.sleep(1.5)
+        webbrowser.open("http://127.0.0.1:8000/dashboard")
 
     print("🚀 STARTING SERVER...")
+
+    threading.Thread(target=open_browser).start()
 
     uvicorn.run(
         "main:app",
         host="127.0.0.1",
         port=8000,
-        reload=False   # ❗ IMPORTANT: disable reload for now
+        reload=True
     )

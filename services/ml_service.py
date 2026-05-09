@@ -1,34 +1,84 @@
 import re
 
 # =============================
+# 🔹 LOAD MODEL
+# =============================
+
+def load_or_train():
+
+    print("✅ Simple ML Model Loaded")
+
+
+# =============================
 # 🔹 CLEAN TEXT
 # =============================
+
 def clean_text(text: str):
+
     text = text.lower()
-    text = re.sub(r'[^a-z\s]', '', text)
+
+    text = re.sub(
+        r'[^a-z\s]',
+        '',
+        text
+    )
+
     return text.strip()
 
 
 # =============================
 # 🔹 PREDICT FUNCTION
 # =============================
+
 def predict_one(text: str):
 
-    print("🔥 FIXED ML RUNNING:", text)
+    print(
+        "🔥 FIXED ML RUNNING:",
+        text
+    )
 
-    # Empty check
+    # EMPTY CHECK
     if not text or text.strip() == "":
         return "Neutral"
 
     text = clean_text(text)
 
-    # ✅ POSITIVE
-    if "good" in text or "great" in text or "love" in text or "amazing" in text:
-        return "Positive"
+    # POSITIVE
+    positive_words = [
 
-    # ✅ NEGATIVE
-    if "bad" in text or "hate" in text or "terrible" in text or "worst" in text:
-        return "Negative"
+        "good",
+        "great",
+        "love",
+        "amazing",
+        "excellent",
+        "awesome",
+        "best",
+        "happy"
+    ]
 
-    # ✅ DEFAULT
+    # NEGATIVE
+    negative_words = [
+
+        "bad",
+        "hate",
+        "terrible",
+        "worst",
+        "poor",
+        "awful",
+        "sad"
+    ]
+
+    # CHECK POSITIVE
+    for word in positive_words:
+
+        if word in text:
+            return "Positive"
+
+    # CHECK NEGATIVE
+    for word in negative_words:
+
+        if word in text:
+            return "Negative"
+
+    # DEFAULT
     return "Neutral"
